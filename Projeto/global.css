@@ -1,0 +1,36 @@
+button{
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.recsenha_bt{
+    padding: 0px;
+    background: transparent;
+    border: none;
+    color: rgb(0, 102, 255);
+    margin-top: 50px;
+}
+
+.entrar_bt{
+    background: white;
+    border: none;
+    margin-bottom: 0;
+}
+
+.registro_bt{
+    background: transparent;
+    border: 1px solid white;
+}
+
+button:active{
+    opacity: 0.7;
+}
+
+button[disabled]{
+    opacity: 0.5;
+}
+
+.error{
+    color: red;
+    display: none;
+}

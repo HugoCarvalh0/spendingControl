@@ -1,0 +1,26 @@
+body{
+    background:linear-gradient(to right bottom, transparent, rgb(107, 243, 107)) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 98vh;
+}
+
+form{
+    width: 250px;
+}
+
+.senha_input{
+    margin-bottom: 0;
+}
+
+input, button{
+    padding: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: -webkit-fill-available;
+}
+
+
+
+
