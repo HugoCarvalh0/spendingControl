@@ -1,9 +1,5 @@
 body{
     background:linear-gradient(to right bottom, transparent, rgb(107, 243, 107)) ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 98vh;
 }
 
 form{

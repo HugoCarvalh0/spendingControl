@@ -1,6 +1,14 @@
+
 button{
     cursor: pointer;
     margin-top: 10px;
+}
+
+.centralizar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 98.3vh;
 }
 
 .recsenha_bt{
@@ -33,4 +41,15 @@ button[disabled]{
 .error{
     color: red;
     display: none;
+}
+
+.carregando{
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.carregando label{
+    font-size: 24px;
 }

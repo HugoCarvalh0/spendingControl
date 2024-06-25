@@ -56,9 +56,25 @@ const form = {
     recsenha_bt: () => document.getElementById("recsenha_bt")
 }
 
-function login(){
-    window.location.href = "pages/home/home.html";
+function getErrorMessage(error) {
+    if (error.code == "auth/invalid-credential"){
+        return "Usuário ou senha inválidos";
+    }
+    return error.message;
 }
+
+function login(){
+    showLoading();
+    firebase.auth().signInWithEmailAndPassword(form.email().value, form.password().value)
+    .then(response =>{
+        hideLoading();
+        window.location.href = "pages/home/home.html";
+    }).catch(error => {
+        hideLoading();
+        alert(getErrorMessage(error));
+    });
+}
+
 
 function registrar(){
     window.location.href = "pages/register/registrar.html"
