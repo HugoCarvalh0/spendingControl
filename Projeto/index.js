@@ -58,7 +58,10 @@ const form = {
 
 function getErrorMessage(error) {
     if (error.code == "auth/invalid-credential"){
-        return "Usuário ou senha inválidos";
+        return "Email ou senha inválidos";
+    }
+    if (error.code == "auth/invalid-value-(email),-starting-an-object-on-a-scalar-field"){
+        return "Email inválido"
     }
     return error.message;
 }
@@ -75,7 +78,18 @@ function login(){
     });
 }
 
+function recuperarSenha(){
+    showLoading();
+    firebase.auth().sendPasswordResetEmail(document.getElementById("email").value).then(() => {
+        hideLoading();
+        alert("Email enviado com sucesso");
+    }).catch(error => {
+        hideLoading();
+        alert(getErrorMessage(error));
+    });
+}
 
 function registrar(){
     window.location.href = "pages/register/registrar.html"
 }
+
