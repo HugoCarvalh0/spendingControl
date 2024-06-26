@@ -1,7 +1,27 @@
 
+body{
+    margin: 0;
+}
+
+
 button{
     cursor: pointer;
     margin-top: 10px;
+}
+
+form{
+    width: 250px;
+}
+
+input, button{
+    padding: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: -webkit-fill-available;
+}
+
+.senha_input{
+    margin-bottom: 5px;
 }
 
 .centralizar{
@@ -11,7 +31,7 @@ button{
     height: 98.3vh;
 }
 
-.recsenha_bt{
+.bkLink{
     padding: 0px;
     background: transparent;
     border: none;
@@ -19,13 +39,13 @@ button{
     margin-top: 50px;
 }
 
-.entrar_bt{
+.bkBranco{
     background: white;
     border: none;
     margin-bottom: 0;
 }
 
-.registro_bt{
+.bkTransparente{
     background: transparent;
     border: 1px solid white;
 }
