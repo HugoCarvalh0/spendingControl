@@ -15,23 +15,31 @@
     <form action="">
         <div>
             <div><label for="email">Email</label></div>
-            <input type="email" placeholder="seu@email.com" name="email">
+            <input type="email" id="email" placeholder="seu@email.com" name="email" onchange="onChangeEmail()">
+            <div class="error" id="email_required">Email obrigatório</div>
+            <div class="error" id="invalid_email">Email inválido</div>
         </div>
         <div>
             <div><label for="senha">Senha</label></div>
-            <input type="senha" placeholder="Senha" name="senha">
+            <input type="password" id="password" placeholder="Senha" name="senha" onchange="onChangePassword()">
+            <div class="error" id="password_required">Senha é obrigatória</div>
+            <div class="error" id="invalid_password">Senha deve ter pelo menos 6 digitos</div>
         </div>
         <div>
             <div><label for="confSenha">Confirmar senha</label></div>
-            <input type="confSenha" placeholder="Confirmar senha" name="confSenha">
+            <input type="password" id="ConfPassword" placeholder="Confirmar senha" name="confSenha" onchange="onChangeConfPassword()">
+            <div class="error" id="password_doesnt_match">As senhas não são iguais</div>
         </div>
         <div>
-            <button type="button" class="bkBranco" >Registrar</button>
+            <button type="button" class="bkBranco" disabled="true" id="register">Registrar</button>
         </div>
         <div>
             <button type="button" class="bkTransparente" >Login</button>
         </div>
     </form>
+
+    <script src="register.js"></script>
+    <script src="../../validation.js"></script>
 
 </body>
 
