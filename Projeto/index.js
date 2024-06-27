@@ -1,3 +1,9 @@
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        window.location.href = "pages/home/home.html";
+    }
+});
+
 function validateEmailField(){
     toggleDisableButtons();
     toggleEmailErros();
@@ -16,7 +22,6 @@ function isEmailValid(){
     return validateEmail(email);
 }
 
-//Funções para Validar Senha --------------
 function isPasswordValid(){
     const password = form.password().value;
     if(!password){
@@ -27,7 +32,7 @@ function isPasswordValid(){
 
 function toggleEmailErros(){
     const email = form.email().value
-    //ternários
+
     form.email_required().style.display = email ? "none" : "block";
     form.invalid_email().style.display = validateEmail(email) ? "none" : "block";
 }
