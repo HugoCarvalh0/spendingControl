@@ -1,3 +1,9 @@
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        window.location.href = "../home/home.html";
+    }
+});
+
 function registro() {
     showLoading();
     const email = form.email().value;
