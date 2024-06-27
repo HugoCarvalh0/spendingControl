@@ -31,7 +31,7 @@
             <div class="error" id="password_doesnt_match">As senhas não são iguais</div>
         </div>
         <div>
-            <button type="button" class="bkBranco" disabled="true" id="register">Registrar</button>
+            <button type="button" class="bkBranco" disabled="true" id="register" onclick="registro()">Registrar </button>
         </div>
         <div>
             <button type="button" class="bkTransparente" >Login</button>
@@ -40,6 +40,10 @@
 
     <script src="register.js"></script>
     <script src="../../validation.js"></script>
+    <script src="../../loading.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="../../firebase-init.js"></script>
 
 </body>
 

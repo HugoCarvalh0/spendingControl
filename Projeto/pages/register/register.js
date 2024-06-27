@@ -1,3 +1,16 @@
+function registro() {
+    showLoading();
+    const email = form.email().value;
+    const password = form.password().value;
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+        hideLoading();
+        window.location.href = "../../pages/home/home.html"; 
+    }).catch(error => {
+        hideLoading();
+        alert(getErrorMessage(error));
+    })
+}
+
 function onChangeEmail(){
     const email = form.email().value;
     form.email_required().style.display = email ? "none" : "block";
@@ -24,10 +37,6 @@ function validateConfPassMatch(){
     form.password_doesnt_match().style.display = confPass == password ? "none" : "block";
 }
 
-function toggleRegisterButton(){
-    form.register_button().disabled = !isFormValid();
-}
-
 function isFormValid(){
     const email = form.email().value;
     if (!email || !validateEmail(email)){
@@ -42,6 +51,17 @@ function isFormValid(){
         return false;
     }
     return true;
+}
+
+function toggleRegisterButton(){
+    form.register_button().disabled = !isFormValid();
+}
+
+function getErrorMessage(error){
+    if (error.code == "auth/email-already-in-use"){
+        return "Este email ja está em uso"
+    }
+    return error.message;
 }
 
 const form = {
