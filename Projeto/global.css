@@ -25,14 +25,14 @@ input, button{
 }
 
 .ajustBk{
-    height: 98.3vh;
+    height: 100vh;
 }
 
 .centralizar{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 98.3vh;
+    height: 100vh;
 }
 
 .bkLink{
@@ -62,6 +62,32 @@ button[disabled]{
     opacity: 0.5;
 }
 
+.fab{
+    width: 54px;
+    height: 54px;
+    border-radius: 50px;
+    font-size: 24px;
+    border: none;
+    box-shadow: 2px 2px 2px gray;   
+    cursor: pointer;
+}
+
+.fab:hover{
+    opacity: 0.8;
+}
+
+.fab.fixed{
+    position: fixed;
+}
+
+.fab.bottom{
+    bottom: 32px;
+}
+
+.fab.right{
+    right: 32px;
+}
+
 .error{
     color: red;
     display: none;
@@ -77,3 +103,4 @@ button[disabled]{
 .carregando label{
     font-size: 24px;
 }
+
