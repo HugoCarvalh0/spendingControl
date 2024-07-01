@@ -9,9 +9,11 @@ function logout(){
 findTransactions();
 
 function findTransactions(){
-    setTimeout(() => {
-        addTransacationToScreen(fakeTransactions)
-    }, 1000)
+    firebase.firestore().collection('transactions').get().then(snapshot =>{
+        console.log((snapshot.docs.map(doc => doc.data())))
+        const transactions = (snapshot.docs.map(doc => doc.data()));
+        addTransacationToScreen(transactions);
+    })
 }
 
 function addTransacationToScreen(transactions){
@@ -30,7 +32,7 @@ function addTransacationToScreen(transactions){
         li.appendChild(value);
 
         const type = document.createElement('p');
-        type.innerHTML = transactions.transationType;
+        type.innerHTML = transactions.transactionType;
         li.appendChild(type);
 
         if(transactions.description){
@@ -49,22 +51,3 @@ function formatDate(date){
     newDate.setDate(newDate.getDate()+1);
     return newDate.toLocaleDateString();
 }
-
-const fakeTransactions=[{
-    type: 'gasto',
-    date: '2024-07-01',
-    money:{
-        currency: 'R$',
-        value: 10,
-    },
-    transationType: 'Supermercado',
-}, {
-    type: 'entrada',
-    date: '2024-07-02',
-    money:{
-        currency: 'R$',
-        value: 10,
-    },
-    transationType: 'Supermercado',
-    description: 'Pix fulano'
-}]
