@@ -1,11 +1,14 @@
 const form = {
+    entrada: () => document.getElementById("entrada"),
     date: () => document.getElementById("date"),
     date_required: () => document.getElementById("date_required"),
+    currency: () => document.getElementById("currency"),
     value: () => document.getElementById("value"),
     value_required: () => document.getElementById("value_required"),
     negative_value: () => document.getElementById("negative_value"),
     type: () => document.getElementById("type"),
     type_required: () => document.getElementById("type_required"),
+    description: () => document.getElementById("description"),
     saveButton: () => document.getElementById("saveButton")
 }
 
@@ -45,4 +48,35 @@ function isFormValid(){
     }
 
     return true;
+}
+
+function saveTransaction(){
+    showLoading();
+
+    const transaction = createTransaction();
+
+    firebase.firestore().collection('transactions').add(transaction).then(() => {
+        hideLoading();
+        window.location.href = "../home/home.html"
+    }).catch(() => {
+        hideLoading();
+        alert("Erro ao salvar transação")
+    }) 
+
+}
+
+function createTransaction(){
+    return {
+        type: form.entrada().checked ? "entrada" : "gasto",
+        date: form.date().value,
+        money: {
+            currency: form.currency().value,
+            value: parseFloat(form.value().value)
+        },
+        transactionType: form.type().value,
+        description: form.description().value,
+        user: {
+            uid: firebase.auth().currentUser.uid
+        }
+    }
 }

@@ -14,13 +14,12 @@
     <header>
         <button type="button" class="bkTransparente" onclick="logout()">Sair</button>
     </header>
-
     <Main class="centralizar">
         <form class="form-field">
             <div>
                 <div><label>Transação *</label></div>
-                <input type="radio" name="transacao" id="Entrada"> <label for="Entrada">Entrada</label>
-                <input type="radio" name="transacao" id="Gasto"> <label for="Gasto">Gasto</label>
+                <input type="radio" name="transacao" id="entrada" checked> <label for="entrada">Entrada</label>
+                <input type="radio" name="transacao" id="gasto"> <label for="gasto">Gasto</label>
             </div>
             <div>
                 <div><label for="date">Data *</label></div>
@@ -30,9 +29,9 @@
             <div>
                 <div><label for="currency">Moeda *</label></div>
                 <select name="currency" id="currency">
-                    <option>R$</option>
-                    <option>US$</option>
-                    <option>€</option>
+                    <option value="BRL">R$</option>
+                    <option value="USD">US$</option>
+                    <option value="EUR">€</option>
                 </select>
             </div>
             <div>
@@ -58,7 +57,7 @@
                 <div><label for="description">Descrição</label></div>
                 <input type="text" name="description" id="description">
             </div>
-            <button type="button" class="bkBranco" disabled id="saveButton">Salvar</button>
+            <button type="button" class="bkBranco" id="saveButton" disabled onclick="saveTransaction()">Salvar</button>
             <button type="button" class="bkTransparente">Cancelar</button>
         </form>
     </Main>
