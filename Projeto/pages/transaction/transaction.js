@@ -80,3 +80,15 @@ function createTransaction(){
         }
     }
 }
+
+function cancelButton(){
+    window.location.href = "../home/home.html"
+}
+
+function logout(){
+    firebase.auth().signOut().then(() => {
+        window.location.href = "../../index.html"
+    }).catch(() => {
+        alert("Erro ao sair")
+    })
+}
