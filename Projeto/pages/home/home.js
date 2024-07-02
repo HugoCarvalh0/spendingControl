@@ -65,3 +65,8 @@ function formatDate(date){
     newDate.setDate(newDate.getDate()+1);
     return newDate.toLocaleDateString();
 }
+
+function newTransaction(){
+    window.location.href = "../transaction/transaction.html"
+}
+
