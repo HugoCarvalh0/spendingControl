@@ -18,16 +18,17 @@
     <Main class="centralizar">
         <form class="form-field">
             <div>
-                <div><label>Transação</label></div>
+                <div><label>Transação *</label></div>
                 <input type="radio" name="transacao" id="Entrada"> <label for="Entrada">Entrada</label>
                 <input type="radio" name="transacao" id="Gasto"> <label for="Gasto">Gasto</label>
             </div>
             <div>
-                <div><label for="date">Data</label></div>
-                <input type="date" name="date" id="date">
+                <div><label for="date">Data *</label></div>
+                <input type="date" name="date" id="date" onchange="onChangeDate()">
+                <div class="error" id="date_required">Data válida obrigatória</div>
             </div>
             <div>
-                <div><label for="currency">Moeda</label></div>
+                <div><label for="currency">Moeda *</label></div>
                 <select name="currency" id="currency">
                     <option>R$</option>
                     <option>US$</option>
@@ -35,13 +36,15 @@
                 </select>
             </div>
             <div>
-                <div><label for="value">Valor</label></div>
-                <input type="number" name="value" id="value">
+                <div><label for="value">Valor *</label></div>
+                <input type="number" name="value" id="value" onchange="onChangeValue()">
+                <div class="error" id="value_required">Valor é obrigatório</div>
+                <div class="error" id="negative_value">Valor deve ser maior que zero</div>
             </div>
             <div>
-                <div><label for="type">Tipo de transação</label></div>
-                <select name="type" id="type">
-                    <option>- Selecione um tipo de transação -</option>
+                <div><label for="type">Tipo de transação *</label></div>
+                <select name="type" id="type" onchange="onChangeType()">
+                    <option value="">- Selecione um tipo de transação -</option>
                     <option>Supermercado</option>
                     <option>Aluguel</option>
                     <option>Alimentação</option>
@@ -49,12 +52,13 @@
                     <option>Investimento</option>
                     <option>Outros</option>
                 </select>
+                <div class="error" id="type_required">Tipo de transação obrigatório</div>
             </div>
             <div>
                 <div><label for="description">Descrição</label></div>
                 <input type="text" name="description" id="description">
             </div>
-            <button type="button" class="bkBranco">Salvar</button>
+            <button type="button" class="bkBranco" disabled id="saveButton">Salvar</button>
             <button type="button" class="bkTransparente">Cancelar</button>
         </form>
     </Main>

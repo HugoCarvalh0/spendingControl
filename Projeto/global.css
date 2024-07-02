@@ -1,6 +1,6 @@
 body{
     margin: 0;
-    background:rgb(181, 250, 181);
+    background:rgb(0, 19, 97);
 }
 
 header{
@@ -18,6 +18,10 @@ button{
 
 .form-field{
     width: 250px;
+}
+
+label{
+    color: white;
 }
 
 input, button, select{
@@ -50,7 +54,7 @@ input[type="radio"]{
     padding: 0px;
     background: transparent;
     border: none;
-    color: rgb(0, 102, 255);
+    color: rgb(0, 247, 255);
     margin-top: 50px;
 }
 
@@ -61,6 +65,7 @@ input[type="radio"]{
 }
 
 .bkTransparente{
+    color: white;
     background: transparent;
     border: 1px solid white;
 }
