@@ -1,5 +1,6 @@
 const form = {
     entrada: () => document.getElementById("entrada"),
+    gasto: () => document.getElementById("gasto"),
     date: () => document.getElementById("date"),
     date_required: () => document.getElementById("date_required"),
     currency: () => document.getElementById("currency"),
@@ -50,21 +51,6 @@ function isFormValid(){
     return true;
 }
 
-function saveTransaction(){
-    showLoading();
-
-    const transaction = createTransaction();
-
-    firebase.firestore().collection('transactions').add(transaction).then(() => {
-        hideLoading();
-        window.location.href = "../home/home.html"
-    }).catch(() => {
-        hideLoading();
-        alert("Erro ao salvar transação")
-    }) 
-
-}
-
 function createTransaction(){
     return {
         type: form.entrada().checked ? "entrada" : "gasto",
@@ -79,6 +65,98 @@ function createTransaction(){
             uid: firebase.auth().currentUser.uid
         }
     }
+}
+
+function save(transaction){
+    showLoading();
+    firebase.firestore()
+    .collection('transactions')
+    .add(transaction)
+    .then(() => {
+        hideLoading();
+        window.location.href = "../home/home.html"
+    }).catch(() => {
+        hideLoading();
+        alert("Erro ao salvar transação")
+    }) 
+}
+
+function update(transaction){
+    showLoading();
+    firebase.firestore()
+    .collection("transactions")
+    .doc(getTransactionUid())
+    .update(transaction)
+    .then(() => {
+        hideLoading();
+        window.location.href = "../home/home.html"
+    }).catch(() => {
+        hideLoading();
+        alert("Erro ao atualizar transação")
+    }) 
+}
+
+function getTransactionUid(){
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('uid') 
+}
+
+function isNewTransaction(){
+    return getTransactionUid() ? false : true;
+}
+
+function saveTransaction(){
+    const transaction = createTransaction();
+
+    if (!isNewTransaction){
+        save(transaction);
+    } else {
+        update(transaction);
+    }
+}
+
+function fillTransaction(transaction){
+    if (transaction.type == "entrada"){
+        form.entrada().checked = true;
+    }else {
+        form.gasto().checked = true
+    }
+
+    form.date().value = transaction.date;
+    form.currency().value = transaction.money.currency;
+    form.value().value = transaction.money.value;
+    form.type().value = transaction.transactionType;
+
+    if(transaction.description){
+        form.description().value = transaction.description;
+    }
+}
+
+function findTransactionByUid(uid){
+    showLoading();
+
+    firebase.firestore()
+    .collection('transactions')
+    .doc(uid)
+    .get()
+    .then(doc => {
+        hideLoading();
+        if (doc.exists){
+            fillTransaction(doc.data())
+            toggleSaveButton();
+        }else {
+            alert("Documento não encontrado")
+            window.location.href = "../home/home.html"
+        }
+    }).catch(() => {
+        hideLoading();
+        alert("Erro ao recuperar documento")
+    })
+}
+
+if (!isNewTransaction()){
+    const uid = getTransactionUid();
+    findTransactionByUid(uid);
 }
 
 function cancelButton(){

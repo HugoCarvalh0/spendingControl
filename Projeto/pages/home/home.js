@@ -21,7 +21,10 @@ function findTransactions(user){
         .get()
         .then(snapshot =>{ 
             hideLoading();
-            const transactions = snapshot.docs.map(doc => doc.data());
+            const transactions = snapshot.docs.map(doc => ({
+                ...doc.data(),
+                uid: doc.id
+            }))
             addTransacationToScreen(transactions);
     }).catch(error => {
         hideLoading();
@@ -36,6 +39,9 @@ function addTransacationToScreen(transactions){
     transactions.forEach(transactions => {
         const li = document.createElement('li');
         li.classList.add(transactions.type);
+        li.addEventListener("click", () => {
+            window.location.href = "../transaction/transaction.html?uid=" + transactions.uid;
+        })
 
         const date = document.createElement('b');
         date.innerHTML = formatDate(transactions.date);
