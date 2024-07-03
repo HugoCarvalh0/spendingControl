@@ -14,17 +14,9 @@ firebase.auth().onAuthStateChanged(user => {
 
 function findTransactions(user){
     showLoading();
-    firebase.firestore()
-        .collection('transactions')
-        .where('user.uid', '==', user.uid )
-        .orderBy('date', 'desc')
-        .get()
-        .then(snapshot =>{ 
+    transactionService.findByUser(user)
+        .then(transactions =>{ 
             hideLoading();
-            const transactions = snapshot.docs.map(doc => ({
-                ...doc.data(),
-                uid: doc.id
-            }))
             addTransacationToScreen(transactions);
     }).catch(error => {
         hideLoading();
@@ -37,42 +29,52 @@ function addTransacationToScreen(transactions){
     const orderedList = document.getElementById("transactionsList")
 
     transactions.forEach(transactions => {
-        const li = document.createElement('li');
-        li.classList.add(transactions.type);
-        li.id = transactions.uid;
-        li.addEventListener("click", () => {
-            window.location.href = "../transaction/transaction.html?uid=" + transactions.uid;
-        })
-
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add("bkTransparente", "alerta")
-        deleteButton.innerHTML = "Deletar";
-        deleteButton.addEventListener("click", event => {
-            event.stopPropagation();
-            confirmDelete(transactions);
-        })
-        li.appendChild(deleteButton);
-
-        const date = document.createElement('b');
-        date.innerHTML = formatDate(transactions.date);
-        li.appendChild(date);
-
-        const value = document.createElement('p');
-        value.innerHTML = transactions.money.currency + ' ' + transactions.money.value.toFixed(2);
-        li.appendChild(value);
-
-        const type = document.createElement('p');
-        type.innerHTML = transactions.transactionType;
-        li.appendChild(type);
+        const li = createTransactionListItem(transactions);
+        
+        li.appendChild(createDeleteButton(transactions));
+        li.appendChild(createBold(formatDate(transactions.date)));
+        li.appendChild(createParagraph(transactions.money.currency + ' ' + transactions.money.value.toFixed(2)));
+        li.appendChild(createParagraph(transactions.transactionType));
 
         if(transactions.description){
-            const description = document.createElement('p')
-            description.innerHTML = transactions.description;
-            li.appendChild(description)
+            li.appendChild(createParagraph(transactions.description))
         }
         
         orderedList.appendChild(li);
     });
+}
+
+function createTransactionListItem(transaction){
+    const li = document.createElement('li');
+    li.classList.add(transaction.type);
+    li.id = transaction.uid;
+    li.addEventListener("click", () => {
+        window.location.href = "../transaction/transaction.html?uid=" + transaction.uid;
+    })
+    return li;
+}
+
+function createDeleteButton(transaction){
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add("bkTransparente", "alerta")
+    deleteButton.innerHTML = "Deletar";
+    deleteButton.addEventListener("click", event => {
+        event.stopPropagation();
+        confirmDelete(transaction);
+    })
+    return deleteButton;
+}
+
+function createParagraph(value){
+    const element = document.createElement('p')
+    element.innerHTML = value;
+    return element;
+}
+
+function createBold(value){
+    const date = document.createElement('b');
+    date.innerHTML = value
+    return date
 }
 
 function confirmDelete(transactions){
@@ -85,10 +87,7 @@ function confirmDelete(transactions){
 function removeTransaction(transactions){
     showLoading();
 
-    firebase.firestore()
-    .collection("transactions")
-    .doc(transactions.uid)
-    .delete()
+    transactionService.remove(transactions)
     .then(() => {
         hideLoading();
         document.getElementById(transactions.uid).remove();
