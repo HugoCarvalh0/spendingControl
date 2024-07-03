@@ -108,7 +108,7 @@ function isNewTransaction(){
 function saveTransaction(){
     const transaction = createTransaction();
 
-    if (!isNewTransaction){
+    if (isNewTransaction()){
         save(transaction);
     } else {
         update(transaction);

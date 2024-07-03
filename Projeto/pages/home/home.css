@@ -25,3 +25,13 @@ ol li.gasto{
 ol li.entrada{
     border-left: 10px solid green;
 }
+
+button.alerta{
+    width: auto;
+    float: right;
+    display: none;
+}
+
+ol li:hover button.alerta{
+    display: block;
+}
