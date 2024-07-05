@@ -14,8 +14,22 @@ admin.initializeApp({
 
 //GET http://api.controle-de-gastos.com/transactions
 app.get('/transactions', async (request, response) => {
+    const jwt = request.headers.authorization;
+    if (!jwt){
+        response.status(401).json({message: "Usuário não authorizado"})
+    }
+
+    let decodedIdToken = "";
+    try{
+        decodedIdToken = await admin.auth().verifyIdToken(jwt, true);
+    } catch {
+        response.status(401).json({message: "Usuário não authorizado"})
+    }
+
     admin.firestore()
     .collection('transactions')
+    .where("user.uid", "==", decodedIdToken.sub)
+    .orderBy("date", "desc")
     .get()
     .then(snapshot => {
         const transactions = snapshot.docs.map(doc => ({
