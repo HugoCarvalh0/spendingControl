@@ -1,9 +1,8 @@
 import express from "express";
 import admin from "firebase-admin";
+import { authenticateToken } from "./middlewares/auth-jwt.js";
 
 const app = express();
-
-//REST API http://api.controle-de-gastos.com/transactions
 
 //Solução rápida e temporária para desativar a verificação de certificados SSL/TLS, útil em ambientes de desenvolvimento ou teste. 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -13,22 +12,11 @@ admin.initializeApp({
   });
 
 //GET http://api.controle-de-gastos.com/transactions
-app.get('/transactions', async (request, response) => {
-    const jwt = request.headers.authorization;
-    if (!jwt){
-        response.status(401).json({message: "Usuário não authorizado"})
-    }
-
-    let decodedIdToken = "";
-    try{
-        decodedIdToken = await admin.auth().verifyIdToken(jwt, true);
-    } catch {
-        response.status(401).json({message: "Usuário não authorizado"})
-    }
-
+app.get('/transactions', authenticateToken, (request, response) => {
+    console.log("Chamou a API")
     admin.firestore()
     .collection('transactions')
-    .where("user.uid", "==", decodedIdToken.sub)
+    .where("user.uid", "==", request.user.uid)
     .orderBy("date", "desc")
     .get()
     .then(snapshot => {
@@ -38,7 +26,6 @@ app.get('/transactions', async (request, response) => {
         }));
         response.json(transactions);
     })
-    // response.json([{id:1}]);
 })
 
 app.listen(3000, () => console.log('API rest iniciada em http://localhost:3000'));
