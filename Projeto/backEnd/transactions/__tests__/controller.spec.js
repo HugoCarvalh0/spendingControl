@@ -50,6 +50,64 @@ describe("Transaction Controller", () => {
             })
         })
 
+        describe("Dado busca de transação por uid",() => {
+
+            test("Quando sucesso, retornar status 200", async () => {
+                const controller = new TransactionController({
+                    findByUid: () => Promise.resolve()
+                });
+
+                const request = {params: {uid: 1}}
+                const response = new ResponseMock();
+
+                await controller.findByUid(request, response);
+
+                expect(response._status).toEqual(200);
+            })
+
+            test("Quando sucesso, retornar transação", async () => {
+                const transaction = {
+                    findByUid: () => Promise.resolve()
+                }
+
+                const controller = new TransactionController(transaction);
+
+                const request = {params: {uid: 1}}
+                const response = new ResponseMock();
+
+                await controller.findByUid(request, response);
+
+                expect(response._json).toEqual(transaction);
+            })
+
+            test("Quando erro, retornar erro 500", async () => {
+                const controller = new TransactionController({
+                    findByUid: () => Promise.reject({code:500})
+                });
+
+                const request = {params: {uid: 1}}
+                const response = new ResponseMock();
+
+                await controller.findByUid(request, response);
+
+                expect(response._status).toEqual(500);
+            })
+
+            test("Quando erro, retornar mensagem de erro", async () => {
+                const controller = new TransactionController({
+                    findByUid: () => Promise.reject({code:500})
+                });
+
+                const request = {params: {uid: 1}}
+                const response = new ResponseMock();
+
+                await controller.findByUid(request, response);
+
+                expect(response._json).toEqual({code: 500});
+            })
+
+        })
+
         class ResponseMock{
             _json = null;
             _status = 0;
@@ -61,7 +119,6 @@ describe("Transaction Controller", () => {
                 return this;
             }
         }
+        
     })
-
-    
 })

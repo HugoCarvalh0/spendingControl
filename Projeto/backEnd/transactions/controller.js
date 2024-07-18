@@ -17,4 +17,16 @@ export class TransactionController{
                 response.status(error.code).json(error);
             })
     }
+
+    // https://url/transactions/uid
+    findByUid (request, response){
+        this.#transaction.uid = request.params.uid
+
+        return this.#transaction.findByUid().then(() => {
+            response.status(200).json(this.#transaction);
+        }).catch(error => {
+            response.status(error.code).json(error)
+        });
+
+    }
 }
