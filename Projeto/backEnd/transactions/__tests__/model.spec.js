@@ -1,5 +1,6 @@
 import { TransactionNotFoundError } from "../errors/transaction-not-found.error copy.js";
 import { TransactionUidNotInformedError } from "../errors/transaction-uid-not-informed.error.js";
+import { UserDoesntOwnTransactionError } from "../errors/user-doesnt-own-transaction.error.js";
 import { UserNotInformedError } from "../errors/user-not-informed.error.js";
 import { Transaction } from "../model.js";
 import { TransactionRepository } from "../repository.js";
@@ -46,13 +47,14 @@ describe("Transaction model", () => {
         })
     })
 
-    describe("Dado buscar transação por id", () => {
+    describe("Dado buscar transação por uid", () => {
 
-        test("Caso tenha id, então retornar transação", async () => {
+        test("Caso tenha uid, então retornar transação", async () => {
             const model = new Transaction({
                 findByUid: () => Promise.resolve(createTransaction())
             });
             model.uid = 1;
+            model.user = {uid: "anyUserUid"};
 
             await model.findByUid();
 
@@ -60,7 +62,20 @@ describe("Transaction model", () => {
 
         })
 
-        test("Caso não tenha id, retornar erro 500", async () => {
+        test("Mas não ser o dono da transação, retorna erro 403", async () => {
+            const transactionDb = createTransaction();
+            transactionDb.user = {uid: "anyOtherUserUid"}
+
+            const model = new Transaction({
+                findByUid: () => Promise.resolve(transactionDb)
+            })
+            model.uid = 9;
+            model.user = {uid: "AnyUserUid"};
+
+            await expect(model.findByUid()).rejects.toBeInstanceOf(UserDoesntOwnTransactionError)
+        })
+
+        test("Caso não tenha uid, retornar erro 500", async () => {
             const model = new Transaction();
 
             await expect(model.findByUid()).rejects.toBeInstanceOf(TransactionUidNotInformedError);
@@ -79,19 +94,12 @@ describe("Transaction model", () => {
             transaction.transactionType = "Supermercado";
             transaction.type = "income";
             transaction.user = {
-                uid: "AnyUserUid"
+                uid: "anyUserUid"
             }
             return transaction;
         }
 
     })
-
-    class TransactionRepositoryMock {
-        _response;
-        findByUserUid(){
-            return this._response;
-        }
-    }
     
     test("Quando transação não encontrada, retorna ero 404", async () => {
 
@@ -103,5 +111,12 @@ describe("Transaction model", () => {
         await expect(model.findByUid()).rejects.toBeInstanceOf(TransactionNotFoundError);
 
     })
+
+    class TransactionRepositoryMock {
+        _response;
+        findByUserUid(){
+            return this._response;
+        }
+    }
 
 })

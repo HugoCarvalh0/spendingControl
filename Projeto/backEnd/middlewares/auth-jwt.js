@@ -1,5 +1,4 @@
 export async function authenticateToken(request, response, next, auth){
-    console.log("Chamou o middleware")
     const jwt = request.headers.authorization;
     if (!jwt){
         response.status(401).json({message: "Usuário não autorizado"})
