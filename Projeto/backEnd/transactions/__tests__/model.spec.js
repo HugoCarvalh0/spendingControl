@@ -82,23 +82,6 @@ describe("Transaction model", () => {
 
         })
 
-        function createTransaction(){
-            const transaction = new Transaction();
-            transaction.uid = 1;
-            transaction.date = "AnyDate";
-            transaction.description = "AnyDescription";
-            transaction.money = {
-                currency: "AnyCurrency",
-                value: 10
-            };
-            transaction.transactionType = "Supermercado";
-            transaction.type = "income";
-            transaction.user = {
-                uid: "anyUserUid"
-            }
-            return transaction;
-        }
-
     })
     
     test("Quando transação não encontrada, retorna ero 404", async () => {
@@ -111,6 +94,71 @@ describe("Transaction model", () => {
         await expect(model.findByUid()).rejects.toBeInstanceOf(TransactionNotFoundError);
 
     })
+
+    describe("Dado criar nova transação", () => {
+
+        const params = {
+            date: "anyDate",
+            description: "anyDescription",
+            money: {
+                currency: "anyCurrency",
+                value:10
+            },
+            transactionType: "supermercado",
+            type: "income",
+            user:{
+                uid: "anyUserUid"
+            }
+
+            
+        }
+
+        const repositoryMock = {
+            _hasSaved: false,
+            save() {
+                this._hasSaved = true;
+                return Promise.resolve({uid: 1});
+            }
+        }
+
+        test("Ao criar, retornar transação", async () => {
+
+            const model = new Transaction(repositoryMock) 
+            await model.create(params); 
+
+            const newTransaction = createTransaction();
+
+            expect(model).toEqual(newTransaction)
+
+        })
+
+        test("Ao criar, salvar transação", async () => {
+            const model = new Transaction(repositoryMock);
+            
+            await model.create(params)
+
+            expect(repositoryMock._hasSaved).toBeTruthy();
+
+        })
+
+    })
+
+    function createTransaction(){
+        const transaction = new Transaction();
+        transaction.uid = 1;
+        transaction.date = "anyDate";
+        transaction.description = "anyDescription";
+        transaction.money = {
+            currency: "anyCurrency",
+            value: 10
+        };
+        transaction.transactionType = "supermercado";
+        transaction.type = "income";
+        transaction.user = {
+            uid: "anyUserUid"
+        }
+        return transaction;
+    }
 
     class TransactionRepositoryMock {
         _response;
