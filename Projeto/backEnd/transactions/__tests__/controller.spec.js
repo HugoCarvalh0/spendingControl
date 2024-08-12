@@ -108,17 +108,87 @@ describe("Transaction Controller", () => {
 
         })
 
-        class ResponseMock{
-            _json = null;
-            _status = 0;
-            json(value){
-                this._json = value;
-            }
-            status(value){
-                this._status = value;
-                return this;
-            }
-        }
-        
+        describe(" Dado criação de nova transação", () => {
+
+            test("Ao sucesso, retornar status 200", async () => {
+                const controller = new TransactionController({
+                    create: () => Promise.resolve()
+                });
+
+                const request = {body: {}};
+                const response = new ResponseMock();
+
+                await controller.create(request, response);
+
+                expect(response._status).toEqual(200);
+            })
+
+            test("Ao sucesso, retornar transação", async () => {
+                const transaction = {
+                    create: () => Promise.resolve()
+                }
+                const controller = new TransactionController(transaction);
+
+                const request = {body: {}};
+                const response = new ResponseMock();
+
+                await controller.create(request, response);
+
+                expect(response._json).toEqual(transaction);
+            })
+
+            test("Ao sucesso, pertencer ao usuário da requisição", async () => {
+                const transaction = {
+                    create: () => Promise.resolve()
+                }
+                const controller = new TransactionController(transaction);
+
+                const request = {body: {}, user: {uid: "anyUserUid"}};
+                const response = new ResponseMock();
+
+                await controller.create(request, response);
+
+                expect(response._json.user).toEqual({uid: "anyUserUid"});
+            })
+
+            test("Ao falhar, retornar status de erro ", async () => {
+                const controller = new TransactionController({
+                    create: () => Promise.reject({code: 500})
+                });
+
+                const request = {body: {}};
+                const response = new ResponseMock();
+
+                await controller.create(request, response);
+
+                expect(response._status).toEqual(500);
+            })
+
+            test("Ao falhar, retornar erro ", async () => {
+                const controller = new TransactionController({
+                    create: () => Promise.reject({code: 500})
+                });
+
+                const request = {body: {}};
+                const response = new ResponseMock();
+
+                await controller.create(request, response);
+
+                expect(response._json).toEqual({code: 500});
+            })
+        })
+
     })
+
+    class ResponseMock{
+        _json = null;
+        _status = 0;
+        json(value){
+            this._json = value;
+        }
+        status(value){
+            this._status = value;
+            return this;
+        }
+    }
 })
