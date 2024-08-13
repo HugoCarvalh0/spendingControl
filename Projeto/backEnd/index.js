@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import admin from "firebase-admin";
 import { transactionsRouter } from "./transactions/routes.js";
 
@@ -10,6 +10,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 admin.initializeApp({
     credential: admin.credential.cert("../../../serviceAccountKey.json")
   });
+
+app.use(json());  
 
 app.use('/transactions', transactionsRouter);
 
