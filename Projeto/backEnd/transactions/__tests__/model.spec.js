@@ -1,9 +1,8 @@
-import { TransactionNotFoundError } from "../errors/transaction-not-found.error copy.js";
+import { TransactionNotFoundError } from "../errors/transaction-not-found.error.js";
 import { TransactionUidNotInformedError } from "../errors/transaction-uid-not-informed.error.js";
 import { UserDoesntOwnTransactionError } from "../errors/user-doesnt-own-transaction.error.js";
 import { UserNotInformedError } from "../errors/user-not-informed.error.js";
 import { Transaction } from "../model.js";
-import { TransactionRepository } from "../repository.js";
 
 describe("Transaction model", () => {
 
